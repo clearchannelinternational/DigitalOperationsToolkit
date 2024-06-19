@@ -1,0 +1,287 @@
+﻿<UserControl x:Class="Broadsign_DOMS.View.AdminView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Broadsign_DOMS.View"
+             xmlns:vm="clr-namespace:Broadsign_DOMS.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+
+        <LinearGradientBrush x:Key="GradientBrush" StartPoint="1,1" EndPoint="0,0">
+            <GradientStop Color="#141E30" Offset="0.5" />
+            <GradientStop Color="#0e1521" Offset="0" />
+        </LinearGradientBrush>
+        
+        <!--style for the main menu radiobutton-->
+        <Style x:Key="MenuButtonTheme" BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="{x:Type RadioButton}">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{TemplateBinding Background}">
+                                <TextBlock Text="{TemplateBinding Content}" VerticalAlignment="Center" Foreground="White" Margin="5,0,0,0"></TextBlock>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Height" Value="50"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#213251"></Setter>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background"  Value="#213251"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!--Main Menu-->
+        <Style x:Key="radioStyle" TargetType="RadioButton">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="white"/>
+            <Setter Property="Command" Value="{Binding CheckedRadioButton}"/>
+            <Style.Triggers>
+
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource GradientBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--User -Modifier-->
+        <DataTemplate DataType="{x:Type vm:UserViewModel}">
+            <Grid>
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style x:Key="MyKey" TargetType="CheckBox">
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Command" Value="{Binding FillModelUserInfo}"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Command" Value="{Binding ClearModelUserInfo}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
+                    <DockPanel>
+                        <TabControl>
+                            <TabItem Header="List" Name="ListUsers">
+                                <DataGrid ItemsSource="{Binding UserList}" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" Height="400"  SelectedItem="{Binding SelectedModelUser}" >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                                        <DataGridTextColumn Header="SSOID" Binding="{Binding Single_sign_on_id}"/>
+                                        <DataGridTextColumn Header="Domain" Binding="{Binding AssignedDomain.Name}"/>
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+                            </TabItem>
+                            <TabItem Header="Add" Name="CloneUsers">
+                                <StackPanel>
+
+                                    <CheckBox Content="Based on Model User" Style="{StaticResource MyKey}"/>
+
+                                    <CheckBox Content="Create in all domains" Command="{Binding CloneUserInAllDomains}"/>
+                                    
+                                    <Label>Username</Label>
+                                    <TextBox Text="{Binding UserName}"/>
+                                    
+                                    <Label>Name</Label>
+                                    <TextBox Text="{Binding FullName}"/>
+                                    
+                                    <Label>Domain ID</Label>
+                                    <TextBox Text="{Binding DomainId}"/>
+                                    
+                                    <Label>Container ID</Label>
+                                    <TextBox Text="{Binding ContainerId}"/>
+                                    
+                                    <Label>Sub Elements</Label>
+                                    <ListBox ItemsSource="{Binding ScopingRelation}" DisplayMemberPath="Scope_resource_type"/>
+                                    
+                                    <Label>Groups</Label>
+                                    <ListBox ItemsSource="{Binding Groups}" DisplayMemberPath="Name"/>
+                                    
+                                    <Button VerticalAlignment="Bottom" Content="Create" Command="{Binding PushUser}" />
+                                
+                                </StackPanel>
+                            </TabItem>
+
+                        </TabControl>
+                        <StackPanel Margin="10, 20, 10,0" >
+                            <Label Content="Groups" Foreground="White" FontWeight="ExtraBold"/>
+                            <ListBox ItemsSource="{Binding SelectedModelUser.Groups, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" Margin="10"/>
+
+                            <Label Content="Permissions" Foreground="White" FontWeight="ExtraBold"/>
+                            <ListBox ItemsSource="{Binding SelectedModelUser.ScopingRelation, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Scope_resource_type" Margin="10"/>
+                        </StackPanel>
+
+                    </DockPanel>
+   
+                
+                </StackPanel>
+     
+
+            </Grid>
+        </DataTemplate>
+        
+        <!--Resource Modifier-->
+        <DataTemplate DataType="{x:Type vm:ResourceViewModel}">
+            <DataTemplate.Resources>
+                <Style x:Key="Tbx" TargetType="TextBox">
+                    <Setter Property="Text" Value="Enter a name to search !"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Text" Value=""/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataTemplate.Resources>
+            <Grid Background="#213251">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Stretch">
+                    <RadioButton Style="{StaticResource radioStyle}" CommandParameter="0" Content="Frame"/>
+                    <RadioButton Style="{StaticResource radioStyle}" CommandParameter="1" Content="Display Units"/>
+                    <RadioButton Style="{StaticResource radioStyle}" CommandParameter="2" Content="Player"/>
+                 
+                </StackPanel>
+                <StackPanel VerticalAlignment="Bottom" Margin="5">
+                    <Button Content="Select CSV" Command="{Binding SelectCsvFileCommand}"/>
+                    <Button Content="Rename Resource" Command="{Binding RenameResourceCommand}" />
+                </StackPanel>
+
+                <DataGrid Grid.Column="1" Margin="5" ItemsSource="{Binding ResourceList, Mode=OneWay}" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Path=Id}"/>
+                        <DataGridTextColumn Header="Current Name" Binding="{Binding Path=Name}"/>
+                        <DataGridTextColumn Header="Futur Name" Binding="{Binding Path=NewName}"/>
+                        <DataGridTextColumn Header="domain" Binding="{Binding Path=AssignedDomain.Name}"/>
+                    </DataGrid.Columns>
+             
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:OpeningHoursViewModel}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Height="50" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3" FontSize="28"/>
+
+                    <ProgressBar Grid.Row="1" Grid.ColumnSpan="3" IsIndeterminate="{Binding IsBusy}" Visibility="{Binding Visibility}" Name="pbStatus" Height="25" />
+                    
+                    <Button Grid.Column="0" Grid.Row="2" Content="Start" Command="{Binding Path=UpdateOH}" />
+                    <Button Grid.Column="1" Grid.Row="2" Content="Stop" Command="{Binding Path=UpdateOH}" IsEnabled="False" />
+                    
+
+                </Grid>
+                <Grid Grid.Column="1" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--TO REMOVE-->
+                    <!--<DockPanel Grid.ColumnSpan="2" >
+                        <Label Content="Enter Token: " FontWeight="Bold" Foreground="White"/>
+                        <TextBox Text="{Binding BSCToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </DockPanel>-->
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
+                        <DockPanel>
+                            <Button Content="Select file" Command="{Binding SelectFile}"/>
+                            <Label Content="Here comes the selected file" Foreground="White"/>
+                        </DockPanel>
+               
+                        <Button Content="Export Report" Command="{Binding ExportCommand}" />
+                    </StackPanel>
+
+                </Grid>
+                <DataGrid Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Path=LogModels, UpdateSourceTrigger=PropertyChanged}" Margin="5" AutoGenerateColumns="True">
+
+                </DataGrid>
+            </Grid>
+
+        </DataTemplate>
+        
+    </UserControl.Resources>
+    <!--Admin view model menu-->
+    <Grid Background="{StaticResource GradientBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        
+        <!--Name holder-->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock FontSize="20" FontWeight="Bold" Foreground="White">USERNAME !</TextBlock>
+        </StackPanel>
+        
+        <!--Menu holder-->
+        <StackPanel Grid.Row="1">
+            <RadioButton Content="Users" Style="{StaticResource MenuButtonTheme}" Command="{Binding ViewClickedCommand}" CommandParameter="UserViewModel"/>
+            <RadioButton Content="Groups" Style="{StaticResource MenuButtonTheme}" Command="{Binding ViewClickedCommand}" CommandParameter="GroupModel"/>
+            <RadioButton Content="Config profiles" Style="{StaticResource MenuButtonTheme}" Command="{Binding ViewClickedCommand}" CommandParameter="ConfigProfileModel"/>
+            <RadioButton Content="Resource modifier" Style="{StaticResource MenuButtonTheme}" Command="{Binding ViewClickedCommand}" CommandParameter="ResourceViewModel"/>
+            <RadioButton Content="Opening hours modifier" Style="{StaticResource MenuButtonTheme}" Command="{Binding ViewClickedCommand}" CommandParameter="OpeningHoursModel"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" VerticalAlignment="Bottom">
+            <RadioButton Content="Back" Command="{Binding BackButtonCommand}" Style="{StaticResource MenuButtonTheme}"/>
+        </StackPanel>
+        
+        <Grid Grid.Column="1" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin="5">
+                <Label Content="Select Domain or leave blank to select all" Foreground="White"/>
+                <ComboBox ItemsSource="{Binding DomainList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedDomain, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="5">
+                <Label Content="Search: (only Name !)" Foreground="White"/>
+                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <Button Grid.Column="2" Content="Clear" Margin="20" Command="{Binding ClearCommand}"/>
+        </Grid>
+        <!--Result and content viewer-->
+        <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding CurrentMenu}"/>
+
+    </Grid>
+</UserControl>
