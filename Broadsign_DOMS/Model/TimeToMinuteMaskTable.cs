@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BUOH.Model
+namespace Broadsign_DOMS.Model
 {
     public class TimeToMinuteMaskTable
     {

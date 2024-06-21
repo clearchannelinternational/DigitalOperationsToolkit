@@ -1,5 +1,5 @@
 ﻿using Broadsign_DOMS.Model;
-using Broadsign_DOMS.Resource;
+
 using Broadsign_DOMS.Service;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Win32;
@@ -121,15 +121,17 @@ namespace Broadsign_DOMS.ViewModel
         }
         private void _renameResources()
         {
-            if (_nameCheckedRadioButton == "Frame")
-                //FrameModel.UpdateFrame();
-                FrameModel.UpdateRename(SelectedDomain, ResourceList);
+            //TODO: CHANGED
+            //if (_nameCheckedRadioButton == "Frame")
+            //    //FrameModel.UpdateFrame();
+            //    FrameModel.UpdateRename(SelectedDomain, ResourceList);
 
-            else if (_nameCheckedRadioButton == "DisplayUnit")
-                DisplayUnitModel.UpdateDisplayUnits(SelectedDomain, ResourceList);
+            //else if (_nameCheckedRadioButton == "DisplayUnit")
+            //    DisplayUnitModel.UpdateDisplayUnits(SelectedDomain, ResourceList);
 
-            else
-                PlayerModel.UpdatePlayers(SelectedDomain, ResourceList);
+            //else
+            //    //PlayerModel.UpdatePlayers(SelectedDomain, ResourceList);
+                
 
         }
         private void _storecheckedButtonName(object obj)

@@ -1,40 +1,34 @@
 ﻿using Broadsign_DOMS.Model;
-using Broadsign_DOMS.Resource;
 using Broadsign_DOMS.Service;
 using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Broadsign_DOMS.ViewModel
 {
     public class LoadingViewModel : ObservableObject, IPageViewModel
     {
+        private readonly BroadsignService _broadsignService;
         private ObservableCollection<Domain> _listDomains;
-        private Domain domains = new Domain();
-        private List<string> _loaded = new List<string>();
+        private Domain _currentDomain;
+        private IDictionary<Type, IList> _typeList;
         private string _loadingMessage;
 
         public LoadingViewModel()
         {
-            generateObsColl();
-            _loadingSync();
+            _broadsignService = BroadsignService.Instance;
+            _initializeTypeList();
+            _ = _loadDataAsync();
         }
+
         public ObservableCollection<Domain> ListDomains
         {
-            get
-            {
-                if (_listDomains == null)
-                {
-                    _listDomains = domains.DomainList;
-                }
-                return _listDomains;
-            }
+            get => _listDomains ?? new Domain().DomainList;
             set
             {
                 _listDomains = value;
@@ -42,90 +36,77 @@ namespace Broadsign_DOMS.ViewModel
             }
         }
 
-        public string LoadingMessage 
+        public string LoadingMessage
         {
-            get
-            {
-                return _loadingMessage;
-            }
+            get => _loadingMessage;
             set
             {
                 _loadingMessage = value;
-                OnPropertyChanged("LoadingMessage");
+                OnPropertyChanged(nameof(LoadingMessage));
             }
         }
 
-        private void generateObsColl()
+
+
+        private void _initializeTypeList()
         {
-            //instantiate all observableobject from tyhe commonresources class to store the api results
-
-            CommonResources.Players = new ObservableCollection<PlayerModel>();
-            CommonResources.DisplayUnits = new ObservableCollection<DisplayUnitModel>();
-            CommonResources.Frames = new ObservableCollection<FrameModel>();
-            CommonResources.DayParts = new ObservableCollection<DayPartModel>();
-            CommonResources.Users = new ObservableCollection<UserModel>();
-            CommonResources.Containers = new ObservableCollection<ContainerModel>();
-            CommonResources.Groups = new ObservableCollection<GroupModel>();
-            CommonResources.Container_Scopes = new ObservableCollection<ContainerScopeModel>();
-            CommonResources.Container_Scope_Relations = new ObservableCollection<ContainerScopeRelationModel>();
-
-
+            _typeList = new Dictionary<Type, IList>
+            {
+                { typeof(PlayerModel), CommonResources.Players = new ObservableCollection<PlayerModel>() },
+                { typeof(DisplayUnitModel), CommonResources.DisplayUnits = new ObservableCollection<DisplayUnitModel>() },
+                { typeof(FrameModel), CommonResources.Frames = new ObservableCollection<FrameModel>() },
+                { typeof(DayPartModel), CommonResources.DayParts = new ObservableCollection<DayPartModel>() },
+                { typeof(UserModel), CommonResources.Users = new ObservableCollection<UserModel>() },
+                { typeof(ContainerModel), CommonResources.Containers = new ObservableCollection<ContainerModel>() },
+                { typeof(GroupModel), CommonResources.Groups = new ObservableCollection<GroupModel>() },
+                { typeof(ContainerScopeModel), CommonResources.Container_Scopes = new ObservableCollection<ContainerScopeModel>() },
+                { typeof(ContainerScopeRelationModel), CommonResources.Container_Scope_Relations = new ObservableCollection<ContainerScopeRelationModel>() }
+            };
         }
 
-        private async Task _loadAllBaseResources(Domain domain)
+        private async Task _loadDataAsync()
         {
-           
-            //TODO check if not better to put this in tasks
-            LoadingMessage += $"\n\nLoading broadsign 'PLAYERS' for domain {domain.Name}";
-            await PlayerModel.GeneratePlayers(domain);
-            LoadingMessage += $"\n{CommonResources.Players.Where(x => x.Domain_id.ToString() == domain.Id).Count()} 'PLAYERS' for domain {domain.Name} loaded";
-
-            LoadingMessage += $"\n\nLoading broadsign 'FRAMES' for domain {domain.Name}";
-            await FrameModel.GenerateFrames(domain);
-            LoadingMessage += $"\n{CommonResources.Frames.Where(x => x.Domain_id.ToString() == domain.Id).Count()} 'FRAMES' for domain {domain.Name} loaded";
-
-            LoadingMessage += $"\n\nLoading broadsign 'DISPLAY UNITS' for domain {domain.Name}";
-            await DisplayUnitModel.GenerateDisplayUnits(domain);
-            LoadingMessage += $"\n{CommonResources.DisplayUnits.Where(x => x.Domain_id.ToString() == domain.Id).Count()} 'DISPLAY UNITS' for domain {domain.Name} loaded";
-
-            //LoadingMessage += $"\n\n Loading broadsign 'GROUPS' resources for domain {domain.Name}";
-            //await GroupModel.GenerateGroups(domain);
-            //LoadingMessage += $"\n{CommonResources.Groups.Where(x => x.Domain_id.ToString() == domain.Id).Count()} 'GROUPS' for domain {domain.Name} loaded";
-
-            //LoadingMessage += $"\n\nLoading broadsign 'CONTAINERS' for Domain: {domain.Name}";
-            //await ContainerModel.GenerateContainers(domain);
-            //LoadingMessage += $"\n{CommonResources.Groups.Where(x => x.Domain_id.ToString() == domain.Id).Count()} 'CONTAINERS' Loaded for domain {domain.Name}";
-
-            //LoadingMessage += $"\n\nLoading broadsign 'CONTAINER SCOPE' for Domain: {domain.Name}";
-            //await ContainerScopeModel.GeneratContainerScopes(domain);
-            //LoadingMessage += $"\n'CONTAINER SCOPE' for domain {domain.Name} Successfully loaded";
-
-            //LoadingMessage += $"\n Loading broadsdign 'CONTAINER SCOPE RELATIONS' for domain {domain.Name}";
-            //await ContainerScopeRelationModel.GenerateScopingRelations(domain);
-            //LoadingMessage += $"\n'CONTAINER SCOPE RELATIONS' for domain {domain.Name} Successfully loaded";
-
-            LoadingMessage += $"\n\nLoading broadsign 'USERS' for domain {domain.Name}";
-            await UserModel.GenerateUsers(domain);
-            LoadingMessage += $"\n{CommonResources.Users.Where(x => x.Domain_id.ToString() == domain.Id).Count()} 'USERS' for domain {domain.Name} loaded" +
-            $"\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-
-        }
-        private async Task _loadingSync()
-        {
-            List<Task> tasks = new List<Task>();
-
-            LoadingMessage += "START LOADING BS RESOURCES";
-            //Go through all domains to get all resources
             foreach (var domain in ListDomains)
-                await _loadAllBaseResources(domain);
-           
-            await Task.WhenAll(tasks);
+            {
+                _currentDomain = domain;
+                LoadingMessage += $"Loading resources for {domain.Name}:\n" +
+                                  "--------------------------------------------------------------------------------------\n";
+                _broadsignService.Token = domain.Token;
+
+                await _processResourceAsync<PlayerModel>("/host/v17", "host");
+                await _processResourceAsync<FrameModel>("/skin/v7", "skin");
+                await _processResourceAsync<DisplayUnitModel>("/display_unit/v12", "display_unit");
+                await _processResourceAsync<ContainerModel>("/container/v9", "container");
+                await _processResourceAsync<ContainerScopeModel>("/container_scope/v1", "container_scope");
+                await _processResourceAsync<ContainerScopeRelationModel>("/container_scope_relationship/v1", "container_scope_relationship");
+                await _processResourceAsync<UserModel>("/user/v13", "user");
+            }
+
             Mediator.Notify("HomeViewModel", "");
             Messenger.Default.Send(ListDomains, "HomeViewModel");
-            File.Create(".\\text.txt");
-            File.AppendText(LoadingMessage);
 
-
+            File.WriteAllText(".\\text.txt", LoadingMessage);
         }
+
+        private async Task _processResourceAsync<T>(string path, string resourceName) where T : IBroadsignAPIModel
+        {
+            if (!_typeList.TryGetValue(typeof(T), out var typeList))
+                throw new InvalidOperationException($"No collection found for type {typeof(T)}");
+
+            var resourceCollection = (ObservableCollection<T>)typeList;
+            var resources = await _broadsignService.GetResources<T>(path, resourceName);
+
+            foreach (var resource in resources)
+            {
+                if (resource.Active)
+                {
+                    resource.AssignedDomain = _currentDomain;
+                    resourceCollection.Add(resource);
+                }
+            }
+
+            LoadingMessage += $"\n{resourceName}: {resources.Count(x => x.Active)}\n";
+        }
+
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Broadsign_DOMS.Model
 {
-    public class IncidentModel : BroadsignAPIModel
+    public class IncidentModel : IBroadsignAPIModel
     {
         public string Critical_escalation_tm_utc { get; set; }
         public string last_status_code_change_utc { get; set; }
@@ -24,13 +24,14 @@ namespace Broadsign_DOMS.Model
         public int Status_code { get; set; }
         public int Target_resource_id { get; set; }
         public int Type_code { get; set; }
+        public bool Active { get; set; }
+        public int Container_id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Parent_id { get; set; }
+        public Domain AssignedDomain { get; set; }
 
-        public static dynamic GetIncidents(string t)
-        {
-            string path = "";
-            Requests.SendRequest(path, t, RestSharp.Method.GET);
-            return JsonConvert.DeserializeObject(Requests.Response.Content);
-        }
+
 
     }
 }

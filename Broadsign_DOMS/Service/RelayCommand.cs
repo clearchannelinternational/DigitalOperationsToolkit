@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Broadsign_DOMS.Resource
+namespace Broadsign_DOMS.Service
 {
     public class RelayCommand : ICommand
     {

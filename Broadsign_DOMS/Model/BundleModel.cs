@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Broadsign_DOMS.Model
 {
-    public class BundleModel : BroadsignAPIModel
+    public class BundleModel : IBroadsignAPIModel
     {
         
         public string Secondary_sep_category_ids { get; set; }
@@ -23,5 +23,12 @@ namespace Broadsign_DOMS.Model
         public bool Allow_custom_duration { get; set; }
         public bool Auto_synchronized { get; set; }
         public bool Fullscreen { get; set; }
+        public bool Active { get; set; }
+        public int Container_id { get; set; }
+        public int Domain_id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Parent_id { get; set; }
+        public Domain AssignedDomain { get; set; }
     }
 }

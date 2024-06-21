@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Broadsign_DOMS.Model
 {
-    public class LoopSlotModel : BroadsignAPIModel
+    public class LoopSlotModel : IBroadsignAPIModel
     {
         
         public string End_date { get; set; }
@@ -20,14 +20,20 @@ namespace Broadsign_DOMS.Model
         public int Inventory_category_id { get; set; }
         public int Priority { get; set; }
         public int Reps_per_hour { get; set; }
+        public bool Active { get; set; }
+        public int Container_id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Parent_id { get; set; }
+        public Domain AssignedDomain { get; set; }
 
-        //ID DEPENDENT !
-        public static dynamic GetLoopSlot(string t, int du)
-        {
-            string path = "/loop_slot/v10/by_display_unit?display_unit_id=" + du;
-            Requests.SendRequest(path, t, RestSharp.Method.GET);
-            return JsonConvert.DeserializeObject(Requests.Response.Content);
-        }
+        ////ID DEPENDENT !
+        //public static dynamic GetLoopSlot(string t, int du)
+        //{
+        //    string path = "/loop_slot/v10/by_display_unit?display_unit_id=" + du;
+        //    Requests.SendRequest(path, t, RestSharp.Method.GET);
+        //    return JsonConvert.DeserializeObject(Requests.Response.Content);
+        //}
 
 
     }

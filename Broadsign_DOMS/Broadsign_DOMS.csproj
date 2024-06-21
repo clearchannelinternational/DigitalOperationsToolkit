@@ -84,6 +84,7 @@
     <Compile Include="Model\BroadsignAPIModel.cs" />
     <Compile Include="Model\BundleModel.cs" />
     <Compile Include="Model\CampaignModel.cs" />
+    <Compile Include="Model\IBroadsignAPIModel.cs" />
     <Compile Include="Model\CloneUserModel.cs" />
     <Compile Include="Model\ConfigProfileModel.cs" />
     <Compile Include="Model\ContainerModel.cs" />
@@ -105,16 +106,20 @@
     <Compile Include="Model\ResourceModifierModel.cs" />
     <Compile Include="Model\SkinSlotModel.cs" />
     <Compile Include="Model\UserModel.cs" />
-    <Compile Include="Resource\Authentication_MetaData.cs" />
-    <Compile Include="Resource\CommonResources.cs" />
-    <Compile Include="Resource\ConvertTimeToMinuteMask.cs" />
-    <Compile Include="Resource\DisplayUnits.cs" />
-    <Compile Include="Resource\LogModel.cs" />
-    <Compile Include="Resource\Mediator.cs" />
-    <Compile Include="Resource\RelayCommand.cs" />
-    <Compile Include="Resource\TimeToMinuteMaskTable.cs" />
+    <Compile Include="Model\CommonResources.cs" />
+    <Compile Include="Model\ConvertTimeToMinuteMask.cs" />
+    <Compile Include="Model\DisplayUnits.cs" />
+    <Compile Include="Model\LogModel.cs" />
+    <Compile Include="Service\BroadsignService.cs" />
+    <Compile Include="Service\BroadsignRequestBase.cs" />
+    <Compile Include="Service\ConsulService.cs" />
+    <Compile Include="Service\IcingaService.cs" />
+    <Compile Include="Service\IRequest.cs" />
+    <Compile Include="Service\Mediator.cs" />
+    <Compile Include="Service\RelayCommand.cs" />
+    <Compile Include="Model\TimeToMinuteMaskTable.cs" />
     <Compile Include="Service\ObservableObject.cs" />
-    <Compile Include="Service\Requests.cs" />
+    <Compile Include="Service\Request.cs" />
     <Compile Include="Service\SshOptions.cs" />
     <Compile Include="ViewModel\AdminViewModel.cs" />
     <Compile Include="ViewModel\ConfigProfileViewModel.cs" />
@@ -233,6 +238,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resource\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

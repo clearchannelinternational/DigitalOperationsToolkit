@@ -5,43 +5,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Broadsign_DOMS.Resource
+namespace Broadsign_DOMS.Service
 {
     public class Mediator
     {
-        static IDictionary<string, List<Action<object>>> tknList = new Dictionary<string, List<Action<object>>>();
+        static IDictionary<string, List<Action<object>>> _listDictionary = new Dictionary<string, List<Action<object>>>();
 
         public static void Subscribe(string token, Action<object> callback)
         {
-            if (!tknList.ContainsKey(token))
+            if (!_listDictionary.ContainsKey(token))
             {
-                List<Action<object>> list = new List<Action<object>>();
-                list.Add(callback);
-                tknList.Add(token, list);
+                List<Action<object>> list = new List<Action<object>> { callback };
+      
+                _listDictionary.Add(token, list);
             }
             else
             {
                 bool found = false;
-                foreach(var item in tknList[token])
+                foreach(var item in _listDictionary[token])
                 {
                     if(item.Method == callback.Method)
                         found = true;
                 }
                 if(!found)
-                    tknList[token].Add(callback);
+                    _listDictionary[token].Add(callback);
             }
         }
         public static void UnSubscribe(string token, Action<object> callback)
         {
-            if(tknList.ContainsKey(token))
-                tknList[token].Remove(callback);
+            if(_listDictionary.ContainsKey(token))
+                _listDictionary[token].Remove(callback);
         }
-
         public static void Notify(string token,string args = null)
         {
-            if (tknList.ContainsKey(token))
+            if (_listDictionary.ContainsKey(token))
             {
-                foreach (var callback in tknList[token])
+                foreach (var callback in _listDictionary[token])
                 {
                     callback(args);
                 }

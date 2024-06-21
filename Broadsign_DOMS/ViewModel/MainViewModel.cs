@@ -1,4 +1,4 @@
-﻿using Broadsign_DOMS.Resource;
+﻿
 using Broadsign_DOMS.Service;
 using System;
 using System.Collections.Generic;

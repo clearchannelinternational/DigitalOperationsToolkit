@@ -1,4 +1,5 @@
-﻿using Broadsign_DOMS.Resource;
+﻿using Broadsign_DOMS.Service;
+using Broadsign_DOMS.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Windows;
 
 namespace Broadsign_DOMS.Model
 {
-    public class DisplayUnitModel : BroadsignAPIModel
+    public class DisplayUnitModel : IBroadsignAPIModel
     {
         
         public string Address { get; set; }
@@ -32,84 +33,48 @@ namespace Broadsign_DOMS.Model
         public int Virtual_host_screen_count { get; set; }
         public string Virtual_id { get; set; }
         public string Zipcode { get; set; }
+        public bool Active { get; set; }
+        public int Container_id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Parent_id { get; set; }
+        public Domain AssignedDomain { get; set; }
 
-        private static dynamic _getDisplayUnits(string token, int id = 0)
-        {
-            string path = "/display_unit/v12";
-            Requests.SendRequest(path, token, RestSharp.Method.GET);
-            return JsonConvert.DeserializeObject(Requests.Response.Content);
-        }
-        public static async Task GenerateDisplayUnits(Domain domain)
-        {
-            await Task.Delay(1);
 
-            var dus = _getDisplayUnits(domain.Token);
-            foreach(var du in dus["display_unit"])
-            {
-                CommonResources.DisplayUnits.Add(new DisplayUnitModel
-                {
+        //public static void UpdateDisplayUnits(Domain domain, ObservableCollection<object> displayUnits)
+        //{
+        //    if(displayUnits == null)
+        //    {
+        //        MessageBox.Show("Please select or upload display units before updating");
+        //    }
 
-                    Active = du.active,
-                    Address = du.address,
-                    Bmb_host_id = du.bmb_host_id,
-                    Container_id = du.container_id,
-                    Display_unit_type_id = du.display_unit_type_id,
-                    Domain_id = du.domain_id,
-                    Enforce_day_parts = du.enforce_day_parts,
-                    Enforce_screen_controls = du.enforce_screen_controls,
-                    Export_enabled = du.export_enabled,
-                    Export_first_enabled_by_user_id = du.export_first_enabled_by_user_id,
-                    Export_first_enabled_tm = du.export_first_enabled_tm,
-                    Export_retired_by_user_id = du.export_retired_by_user_id,
-                    Export_retired_on_tm = du.export_retired_on_tm,
-                    External_id = du.external_id,
-                    Geolocation = du.geolocation,
-                    Host_screen_count = du.host_screen_count,
-                    Id = du.id,
-                    Name = du.name,
-                    Timezone = du.timezone,
-                    Virtual_host_screen_count = du.virtual_host_screen_count,
-                    Virtual_id = du.virtual_id,
-                    Zipcode = du.zipcode,
-                    AssignedDomain = domain
-                });
+        //    var path = "/display_unit/v12";
 
-            }
-        }
-        public static void UpdateDisplayUnits(Domain domain, ObservableCollection<object> displayUnits)
-        {
-            if(displayUnits == null)
-            {
-                MessageBox.Show("Please select or upload display units before updating");
-            }
-
-            var path = "/display_unit/v12";
-
-            foreach(DisplayUnitModel du in displayUnits)
-            {
-                var requestBody = JsonConvert.SerializeObject(new {
-                    active= du.Active,
-                    address= du.Address,
-                    bmb_host_id= du.Bmb_host_id,
-                    container_id= du.Container_id,
-                    display_unit_type_id= du.Display_unit_type_id,
-                    domain_id= du.Domain_id,
-                    enforce_day_parts= du.Enforce_day_parts,
-                    enforce_screen_controls= du.Enforce_day_parts,
-                    export_enabled= du.Enforce_screen_controls,
-                    external_id= du.External_id,
-                    geolocation = du.Geolocation,
-                    id= du.Id,
-                    name = du.NewName,
-                    timezone = du.Timezone,
-                    virtual_host_screen_count= du.Virtual_host_screen_count,
-                    virtual_id= du.Virtual_id,
-                    zipcode = du.Zipcode
-                });
-                Requests.SendRequest(path, domain.Token, RestSharp.Method.PUT, requestBody);
-                du.Name = du.NewName;
-                du.NewName = "";
-            }
-        }
+        //    foreach(DisplayUnitModel du in displayUnits)
+        //    {
+        //        var requestBody = JsonConvert.SerializeObject(new {
+        //            active= du.Active,
+        //            address= du.Address,
+        //            bmb_host_id= du.Bmb_host_id,
+        //            container_id= du.Container_id,
+        //            display_unit_type_id= du.Display_unit_type_id,
+        //            domain_id= du.Domain_id,
+        //            enforce_day_parts= du.Enforce_day_parts,
+        //            enforce_screen_controls= du.Enforce_day_parts,
+        //            export_enabled= du.Enforce_screen_controls,
+        //            external_id= du.External_id,
+        //            geolocation = du.Geolocation,
+        //            id= du.Id,
+        //            name = du.NewName,
+        //            timezone = du.Timezone,
+        //            virtual_host_screen_count= du.Virtual_host_screen_count,
+        //            virtual_id= du.Virtual_id,
+        //            zipcode = du.Zipcode
+        //        });
+        //        Request.SendRequest(path, domain.Token, RestSharp.Method.PUT, requestBody);
+        //        du.Name = du.NewName;
+        //        du.NewName = "";
+        //    }
+        //}
     }
 }

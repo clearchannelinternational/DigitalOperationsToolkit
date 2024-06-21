@@ -1,5 +1,5 @@
 ﻿using Broadsign_DOMS.Model;
-using Broadsign_DOMS.Resource;
+
 using Broadsign_DOMS.Service;
 using GalaSoft.MvvmLight.Helpers;
 using GalaSoft.MvvmLight.Messaging;

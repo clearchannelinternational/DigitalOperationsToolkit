@@ -1,5 +1,5 @@
 ﻿using Broadsign_DOMS.Model;
-using Broadsign_DOMS.Resource;
+
 using Broadsign_DOMS.Service;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -197,7 +197,7 @@ namespace Broadsign_DOMS.ViewModel
         private void _pushUserApi()
         {
             UserModel modeluser = new UserModel { Name = FullName, Username = UserName, Domain_id = Convert.ToInt32(this.DomainId), Container_id = Convert.ToInt32(this.ContainerId), Groups = SelectedModelUser.Groups};
-            UserModel.AddUsers(SelectedModelUser.AssignedDomain, modeluser);
+            //UserModel.AddUsers(SelectedModelUser.AssignedDomain, modeluser);
 
         }
         private void _clearFields(object obj)

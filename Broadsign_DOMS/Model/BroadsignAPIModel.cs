@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Broadsign_DOMS.Model
 {
-    public class BroadsignAPIModel
+    public class BroadsignAPIModel : IBroadsignAPIModel
     {
         public bool Active { get; set; }
         public int Container_id { get; set; }
@@ -14,7 +14,6 @@ namespace Broadsign_DOMS.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public int Parent_id { get; set; }
-
         public Domain AssignedDomain { get; set; }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Broadsign_DOMS.Model;
-using Broadsign_DOMS.Resource;
 using Broadsign_DOMS.Service;
-using BUOH.Model;
 using GalaSoft.MvvmLight.Messaging;
 using Newtonsoft.Json;
 using System;
@@ -219,9 +217,9 @@ namespace Broadsign_DOMS.ViewModel
                         virtual_start_date= daypart.Virtual_start_date,
                         weight= daypart.Weight
                     });
-
-                    await Task.Run(() => Requests.SendRequest("/day_part/v5", BSCToken, RestSharp.Method.PUT, body));
-                    LogModels.Add(new LogModel { DisplayUnit = item.DisplayUnitID, StatusCode = Requests.Response.StatusCode.ToString(), MinuteMask = daypart.Minute_mask });
+                    //TODO: CHANGED
+                    //await Task.Run(() => Request.SendRequest("/day_part/v5", BSCToken, RestSharp.Method.PUT, body));
+                    //LogModels.Add(new LogModel { DisplayUnit = item.DisplayUnitID, StatusCode = Request.Response.StatusCode.ToString(), MinuteMask = daypart.Minute_mask });
 
                 }
                 totalCompleted++;
@@ -271,12 +269,13 @@ namespace Broadsign_DOMS.ViewModel
                     ConvertToMinuteMask();
                 }
 
+                //TODO: CHANGED
                 //Requesting an API call from Broadsign control to get all day parts from the requesting display unit ids
-                Requests.SendRequest("/day_part/v5", BSCToken, RestSharp.Method.GET);
+                //Request.SendRequest("/day_part/v5", BSCToken, RestSharp.Method.GET);
 
                 //stores the request api and parses the json results
-                dynamic result = JsonConvert.DeserializeObject(Requests.Response.Content);
-
+                //dynamic result = ""JsonConvert.DeserializeObject(Request.Response.Content);
+                dynamic result = "";
 
                 int index = 1;
                 //Going trough each Day part from the requested api
