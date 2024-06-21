@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Broadsign_DOMS.Resource
+namespace Broadsign_DOMS.Model
 {
     public abstract class CommonResources
     {

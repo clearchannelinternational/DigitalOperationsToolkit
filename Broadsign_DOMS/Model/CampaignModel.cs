@@ -55,11 +55,11 @@ namespace Broadsign_DOMS.Model
         public string Start_date { get; set; }
         public string Start_time { get; set; }
 
-        public static dynamic GetCampaigns(string t, int id = 0)
-        {
-            string path = "/reservation/v22";
-            Requests.SendRequest(path, t, RestSharp.Method.GET);
-            return JsonConvert.DeserializeObject(Requests.Response.Content);
-        }
+        //public static dynamic GetCampaigns(string t, int id = 0)
+        //{
+        //    string path = "/reservation/v22";
+        //    Requests.SendRequest(path, t, RestSharp.Method.GET);
+        //    return JsonConvert.DeserializeObject(Requests.Response.Content);
+        //}
     }
 }

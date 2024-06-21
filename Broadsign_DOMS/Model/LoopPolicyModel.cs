@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Broadsign_DOMS.Model
 {
-    public class LoopPolicyModel : BroadsignAPIModel
+    public class LoopPolicyModel : IBroadsignAPIModel
     {
         
        
@@ -24,13 +24,19 @@ namespace Broadsign_DOMS.Model
         public int Pirmary_inventory_share_msec { get; set; }
         public string Synchronization_set { get; set; }
         public int Synchronization_type { get; set; }
+        public bool Active { get; set; }
+        public int Container_id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Parent_id { get; set; }
+        public Domain AssignedDomain { get; set; }
 
-        public static dynamic GetLoopPolicy(string t, int id = 0)
-        {
-            string path = "/loop_policy/v10";
-            Requests.SendRequest(path, t, RestSharp.Method.GET);
-            return JsonConvert.DeserializeObject(Requests.Response.Content);
-        }
+        //public static dynamic GetLoopPolicy(string t, int id = 0)
+        //{
+        //    string path = "/loop_policy/v10";
+        //    Requests.SendRequest(path, t, RestSharp.Method.GET);
+        //    return JsonConvert.DeserializeObject(Requests.Response.Content);
+        //}
 
     }
 }

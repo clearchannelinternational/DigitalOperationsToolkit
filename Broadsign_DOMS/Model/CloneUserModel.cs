@@ -1,11 +1,6 @@
-﻿using Broadsign_DOMS.Service;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using Broadsign_DOMS.Model;
+using Broadsign_DOMS.Service;
 
 namespace Broadsign_DOMS.Model
 {

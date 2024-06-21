@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Broadsign_DOMS.Model
 {
-    public class DayPartModel : BroadsignAPIModel
+    public class DayPartModel : IBroadsignAPIModel
     {
         
        
@@ -23,6 +23,13 @@ namespace Broadsign_DOMS.Model
         public int Impressions_per_hour { get; set; }
         
         public int Weight { get; set; }
+        public bool Active { get; set; }
+        public int Container_id { get; set; }
+        public int Domain_id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Parent_id { get; set; }
+        public Domain AssignedDomain { get; set; }
 
         //methods get Day parts
 

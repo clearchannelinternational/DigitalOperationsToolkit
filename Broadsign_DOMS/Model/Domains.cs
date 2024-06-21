@@ -69,6 +69,7 @@ namespace Broadsign_DOMS.Model
 
         public string Id { get => _id; set => _id = value; }
 
+        //TODO: Isolate this to a service
         private void _generateAllTokens()
         {
             domainList = new ObservableCollection<Domain>();

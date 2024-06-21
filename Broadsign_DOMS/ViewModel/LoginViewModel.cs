@@ -1,4 +1,4 @@
-﻿using Broadsign_DOMS.Resource;
+﻿
 using Broadsign_DOMS.Service;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -56,6 +56,8 @@ namespace Broadsign_DOMS.ViewModel
             Messenger.Default.Send(true, "StartViewModel");
             foreach(var claim in loginResult.User.Claims)
                 Debug.WriteLine(claim.ToString());
+
+            //client.LogoutAsync();
           
         }
     }

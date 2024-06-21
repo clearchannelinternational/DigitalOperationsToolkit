@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Broadsign_DOMS.Model
 {
-    public class SkinSlotModel : BroadsignAPIModel
+    public class SkinSlotModel : IBroadsignAPIModel
     {
         
         public string Day_mask { get; set; }
@@ -20,12 +20,18 @@ namespace Broadsign_DOMS.Model
         public int Skin_id { get; set; }
         public string Start_date { get; set; }
         public bool Temporary { get; set; }
+        public bool Active { get; set; }
+        public int Container_id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Parent_id { get; set; }
+        public Domain AssignedDomain { get; set; }
         //ID DEPENDENT !
-        public static dynamic GetSkinSlot(string t, int du_id)
-        {
-            string path = "/skin_slot/v7/by_display_unit?display_unit_id=" + du_id;
-            Requests.SendRequest(path, t, RestSharp.Method.GET);
-            return JsonConvert.DeserializeObject(Requests.Response.Content);
-        }
+        //public static dynamic GetSkinSlot(string t, int du_id)
+        //{
+        //    string path = "/skin_slot/v7/by_display_unit?display_unit_id=" + du_id;
+        //    Requests.SendRequest(path, t, RestSharp.Method.GET);
+        //    return JsonConvert.DeserializeObject(Requests.Response.Content);
+        //}
     }
 }
